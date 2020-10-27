@@ -7,3 +7,4 @@ pacientes/__pycache__
 pacientes/migrations
 
 ubs/__pycache__
+ubs/settings.py
