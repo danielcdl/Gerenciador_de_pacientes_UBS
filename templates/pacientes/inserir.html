@@ -1,0 +1,49 @@
+<!-- Estendemos do template base -->
+{% extends "pacientes/_layouts/base.html" %}
+{% load widget_tweaks %}
+
+<!-- Bloco que define o <title></title> da nossa página -->
+{% block title %}UBS PINHO{% endblock %}
+
+<!-- Bloco de conteúdo da nossa página -->
+{% block conteudo %}
+<div class="container mt-5" >
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" align="center">
+            <div class="card">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="card-header">
+                        <h5 class="card-title">Cadastro de Pacientes</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">SUS</label>{% render_field form.sus class+="form-control"%}
+                            </div>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">NOME</label>{% render_field form.nome style="text-transform:uppercase" class+="form-control"%}
+                            </div>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">MÃE</label>{% render_field form.mae style="text-transform:uppercase" class+="form-control"%}
+                            </div>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">NASCIMENTO</label>{% render_field form.nascimento type="date" class+="form-control"%}
+                            </div>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">Nº FAMILIA</label>{% render_field form.familia class+="form-control"%}
+                            </div>
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">OBSERVAÇÕES</label>{% render_field form.observacao class+="form-control"%}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary">CADASTRAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

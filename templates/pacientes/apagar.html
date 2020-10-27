@@ -1,0 +1,57 @@
+{% extends "caixa/_layouts/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Z3 COMUNICAÇÃO{% endblock %}
+
+{% block conteudo %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Excluir Movimentação</h4>
+                <hr />
+                <h5>Você tem certez que quer excluir a movimentação a seguir?</h5>
+                <table class="table">
+                  <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Descrição</th>
+                        {% if movimentacao.tipo %}
+                          <th scope="col">Entrada</th>
+                        {% else %}
+                            <th scope="col">Saída</th>
+                        {% endif %}
+                            <th scope="col">Data</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          {% if movimentacao.tipo %}
+                                <td><font color="blue">{{ movimentacao.descricao }}</font></td>
+                                <td><font color="blue">{{ movimentacao.valor }}</font></td>
+                          {% else %}
+                                <td><font	color="red">{{ movimentacao.descricao }} </font></td>
+                                <td><font	color="red">{{ movimentacao.valor }} </font></td>
+                          {%endif%}
+                          <td>{{ movimentacao.data }}</td>
+                      </tr>
+                  </tbody>
+                </table>
+                <form method="post">
+                  {% csrf_token %}
+
+                  <hr />
+                  <div class="text-right">
+                    <a href="{% url 'caixa:caixa' %}" class="btn btn-outline-danger">
+                      Cancelar
+                    </a>
+                    <button class="btn btn-danger">Excluir</button>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
