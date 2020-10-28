@@ -7,13 +7,14 @@ from pacientes.forms import PacienteForm
 from pacientes.models import Paciente
 
 
-class Consulta(TemplateView):
-    template_name = "pacientes/consulta.html"
+class Consultar(TemplateView):
+    template_name = "pacientes/consultar.html"
 
 
 class Cadastro(View):
     template_name = 'pacientes/cadastro.html'
     context = {}
+    form_class = PacienteForm
 
     def post(self, request):
         sus = self.request.POST.get('sus', '').strip()
@@ -26,9 +27,9 @@ class Cadastro(View):
             paciente = Paciente.objetos.filter(nome__iexact=nome)
 
         if paciente:
-            form = PacienteForm(request.POST, instance=paciente)
+            form = self.form_class(request.POST, instance=paciente)
         else:
-            form = PacienteForm(request.POST)
+            form = self.form_class(request.POST)
 
         if form.is_valid():
             form.save()
@@ -44,30 +45,24 @@ class Cadastro(View):
         return render(request, self.template_name, self.context)
 
 
-class BuscarPacientes(View):
-    template_name = 'pacientes/buscar.html'
-    context = {}
+def tabela_busca(request):
+    tipo = request.GET.get('tipo')
+    dado = request.GET.get('dado')
+    pacientes = Paciente.objetos.all()
 
-    def get(self, request):
-        pesquisar = self.request.GET.get('pesquisar', False)
-        if pesquisar:
-            tipo = self.request.GET.get('tipo')
-            dado = self.request.GET.get('dado')
+    if tipo and dado:
+        if tipo == 'sus':
+            pacientes = pacientes.filter(sus=dado)
+        elif tipo == 'mae':
+            pacientes = pacientes.order_by('mae').filter(mae__icontains=dado)
+        elif tipo == 'nascimento':
+            pacientes = pacientes.filter(nascimento=dado)
+        elif tipo == 'familia':
+            pacientes = pacientes.filter(familia=dado)
+        else:
+            pacientes = pacientes.filter(nome__icontains=dado)
 
-            pacientes = Paciente.objetos.all()
-            if tipo and dado:
-                if tipo == 'sus':
-                    pacientes = pacientes.filter(sus=dado)
-                elif tipo == 'mae':
-                    pacientes = pacientes.order_by('mae').filter(mae__icontains=dado)
-                elif tipo == 'nascimento':
-                    pacientes = pacientes.filter(nascimento=dado)
-                elif tipo == 'familia':
-                    pacientes = pacientes.filter(familia=dado)
-                else:
-                    pacientes = pacientes.filter(nome__icontains=dado)
-            self.context['pacientes'] = pacientes
-        return render(request, self.template_name, self.context)
+    return render(request, 'pacientes/tabela_busca.html', {'pacientes': pacientes})
 
 
 def consultar_paciente(request):

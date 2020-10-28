@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}UBS PINHO{% endblock %}
+
+{% block conteudo %}
+<div class="container mt-5 justify-content-md-center">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Buscar Pacientes</h5>
+        </div>
+        <div class="card-body">
+            <form id="form_pesquisa" method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label id="lb_tipo" for="tipo">Buscar por:</label>
+                    </div>
+                    <div id="div_lb_dado" class="col-md-4 style="display: none;"">
+                        <label id="lb_dado" for="dado"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <select id="tipo" name="tipo" class="form-control" autofocus required>
+                            <option value="">--------</option>
+                            <option value="sus">SUS</option>
+                            <option value="nome">Nome do paciente</option>
+                            <option value="mae">Nome da mãe</option>
+                            <option value="nascimento">Data de nascimento</option>
+                            <option value="familia">Número de família</option>
+                            <option value="todos">Todos</option>
+                        </select>
+                    </div>
+                    <div id="div_dado" class="col-md-4" style="display: none;">
+                        <input class="form-control" id="dado" name="dado">
+                    </div>
+                    <div id="div_botao" class="col-md-4">
+                        <button id="botao" class="btn btn-primary">Pesquisar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="div_tabela">
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'pacientes/js/consultar.js' %}"></script>
+{% endblock %}
