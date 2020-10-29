@@ -14,7 +14,6 @@ $(document).ready(function () {
             divDado.show();
             divLbDado.show();
             label.text(textoLabel);
-
         }
         if (tipo === 'sus' || tipo === 'familia') {
             input.attr('type', "number");
@@ -27,19 +26,15 @@ $(document).ready(function () {
 
 
     $("#form_pesquisa").submit(function () {
-        let dados = $(this).serialize();
         $.ajax({
             url: "tabela/",
             type: "GET",
-            data: dados,
+            data: $(this).serialize(),
             success: function (data) {
-                let divTabela = $('#div_tabela');
-                divTabela.html(data);
+                $('#div_tabela').html(data);
             },
             error: function (request, status, error) {
-                console.log('erro')
-                let divTabela = $('#div_tabela');
-                divTabela.html('<h4>' + error + '. Tente Novamente.</h4>');
+                $('#div_tabela').html('<h5>' + error + '. Tente Novamente.</h5>');
             }
         });
         return false;

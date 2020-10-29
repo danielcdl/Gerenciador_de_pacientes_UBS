@@ -4,6 +4,7 @@
             <div class="card-header">
                 <h5 class="card-title">Pacientes</h5>
             </div>
+            {% if pacientes == None %}
             <div class="card-body">
                 <table id="tabela" class="table table-striped">
                     <thead class="thead-dark">
@@ -30,6 +31,9 @@
                     </tbody>
                 </table>
             </div>
+            {% else %}
+            <h5>Nenhum paciente encontrado.</h5>
+            {% endif %}
         </div>
     </div>
 </div>
