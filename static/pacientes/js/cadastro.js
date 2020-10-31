@@ -8,12 +8,12 @@ $(document).ready(function () {
 				success: function (dados) {
 					if (dados.encontrado === true) {
 					    let botao = $('#botao');
+					    $('#sus_encontrado').attr('value', 'encontrado');
 						$('#nome').val(dados.nome);
 						$('#mae').val(dados.mae);
 						$('#nascimento').val(dados.nascimento);
 						$('#familia').val(dados.familia);
 						$('#observacao').val(dados.observacao);
-						$('#sus_encontrado').attr('value', 'encontrado');
 						let msg = $('#msg');
 						msg.attr('class', 'alert alert-success');
 						msg.text('Paciente encontrado!');
@@ -49,13 +49,13 @@ $(document).ready(function () {
 						$('#familia').val(dados.familia);
 						$('#observacao').val(dados.observacao);
 						botao.text('ATUALIZAR');
+						let msg = $('#msg');
+						msg.attr('class', 'alert alert-success')
+						msg.text('Paciente encontrado!');
+						msg.show();
 					} else {
 					    botao.text('CADASTRAR');
                     }
-					let msg = $('#msg');
-					msg.attr('class', 'alert alert-success')
-					msg.text('Paciente encontrado!');
-					msg.show();
 					botao.show();
 				},
 				error: function (request, status, error) {

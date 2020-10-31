@@ -8,12 +8,14 @@ $(document).ready(function () {
         let textoLabel = $('#tipo option:selected').text();
 
         if (tipo === 'todos' || tipo === '') {
+            input.removeAttr('required');
             divDado.hide();
             divLbDado.hide();
         } else {
             divDado.show();
             divLbDado.show();
             label.text(textoLabel);
+            input.attr('required', 'required');
         }
         if (tipo === 'sus' || tipo === 'familia') {
             input.attr('type', "number");

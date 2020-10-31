@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h5 class="card-title">Pacientes</h5>
             </div>
-            {% if pacientes == None %}
+            {% if pacientes|length > 0 %}
             <div class="card-body">
                 <table id="tabela" class="table table-striped">
                     <thead class="thead-dark">
@@ -20,9 +20,9 @@
                     <tbody id="corpoTabela">
                     {% for paciente in pacientes %}
                     <tr>
-                        <th>{{paciente.nome}}</th>
+                        <th>{{paciente.nome|title}}</th>
                         <th>{{paciente.sus|default:''}}</th>
-                        <th>{{paciente.mae|default:''}}</th>
+                        <th>{{paciente.mae|title|default:''}}</th>
                         <th>{{paciente.nascimento|default:''|date:'d/m/Y'}}</th>
                         <th>{{paciente.familia|default:''}}</th>
                         <th>{{paciente.observação|default:''}}</th>

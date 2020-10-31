@@ -13,7 +13,11 @@
             <div class="card-body">
                 <fieldset class="col-lg">
                     <legend>Dados do Paciente</legend>
-                    <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
+                    {% if mensagem.sucesso|length > 0 %}
+                        <label id="msg" class="text-center alert alert-success">{{mensagem.sucesso}}</label>
+                    {% else %}
+                        <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
+                    {% endif %}
                     <input id="sus_encontrado" type="checkbox" hidden>
                     <form method="post">
                         {% csrf_token %}

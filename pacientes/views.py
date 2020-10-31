@@ -20,6 +20,7 @@ class Cadastro(View):
         sus = self.request.POST.get('sus', '').strip()
         nome = self.request.POST.get('nome', '').lower().strip()
         paciente = None
+        mensagem = {}
         if sus:
             paciente = Paciente.objetos.filter(sus=sus).last()
 
@@ -33,11 +34,11 @@ class Cadastro(View):
 
         if form.is_valid():
             form.save()
-            self.context['mensagem'] = 'Paciente cadastrado com sucesso'
-            return HttpResponseRedirect(reverse_lazy('paciente:cadastro', self.context))
+            mensagem['sucesso'] = 'Paciente cadastrado com sucesso'
+            return render(request,'pacientes/cadastro.html', {'mensagem': mensagem})
         else:
             self.context['form'] = form
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_name, self.context,)
 
     def get(self, request):
         form = PacienteForm(self.request.GET)
@@ -50,7 +51,7 @@ def tabela_busca(request):
     dado = request.GET.get('dado')
     pacientes = Paciente.objetos.all()
 
-    if tipo and dado:
+    if tipo != '' and dado != '':
         if tipo == 'sus':
             pacientes = pacientes.filter(sus=dado)
         elif tipo == 'mae':
@@ -61,7 +62,6 @@ def tabela_busca(request):
             pacientes = pacientes.filter(familia=dado)
         else:
             pacientes = pacientes.filter(nome__icontains=dado)
-
     return render(request, 'pacientes/tabela_busca.html', {'pacientes': pacientes})
 
 
