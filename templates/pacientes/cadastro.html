@@ -18,13 +18,13 @@
                     {% else %}
                         <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
                     {% endif %}
-                    <input id="sus_encontrado" type="checkbox" hidden>
+                    <input id="encontrado" type="checkbox" hidden>
                     <form method="post">
                         {% csrf_token %}
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <label for="sus" class="input-group-text">SUS</label>
-                                <input id="sus" name="sus" type="text" class="form-control"
+                                <input id="sus" name="sus" type="text" class="form-control" maxlength="15"
                                        placeholder="999 9999 9999 9999">
                             </div>
                             <div class="input-group-prepend">
@@ -54,6 +54,7 @@
                         </div>
                         <div class="card-body" align="center">
                             <button id="botao" class="btn btn-primary" style="display: none"></button>
+                            <button id="reset" type="reset" class="btn btn-primary" style="display: none">LIMPAR</button>
                         </div>
                     </form>
                 </fieldset>

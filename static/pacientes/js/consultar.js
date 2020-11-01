@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('#tipo').on('change', function () {
         let tipo = this.value;
         let divDado = $('#div_dado');
