@@ -1,0 +1,31 @@
+<table id="tabela" class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Segunda</th>
+            <th>Terça</th>
+            <th>Quarta</th>
+            <th>Quinta</th>
+            <th>Sexta</th>
+            <th>Sábado</th>
+            <th>Domingo</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for semana in calendario %}
+        <tr>
+            {% for dia in semana%}
+            <th>
+                <h2>{{dia.data|slice:"0:2"}}</h2>
+                {% if dia.status == 'disponivel' %}
+                    {{dia.motivo}} agendados
+                {% else %}
+                    {% if dia.motivo != 'mes' %}
+                        {{dia.motivo}}
+                    {% endif %}
+                {% endif %}
+            </th>
+            {% endfor%}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

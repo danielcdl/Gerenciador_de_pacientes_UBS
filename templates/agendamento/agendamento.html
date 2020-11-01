@@ -28,6 +28,7 @@
                              <div class="input-group-prepend">
                                 <label for="{{form.data.id_for_label}}" class="input-group-text">{{ form.data.label}}</label>
                                 {% render_field form.data class+='form-control' type='date' %}
+                                 <span class="date-icon" title="Escolha uma data"></span>
                             </div>
                              <div class="input-group-prepend">
                                 <label for="{{form.turno.id_for_label}}" class="input-group-text">{{ form.turno.label}}</label>
@@ -39,6 +40,30 @@
                         </div>
                     </form>
                 </fieldset>
+                <div id="calendario" class="calendar">
+                    <table id="tabela" class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Domingo</th>
+                                <th>Segunda</th>
+                                <th>Terça</th>
+                                <th>Quarta</th>
+                                <th>Quinta</th>
+                                <th>Sexta</th>
+                                <th>Sábado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for semana in calendario%}
+                            <tr>
+                                {% for dia in semana%}
+                                <th>{{dia.dia}}{{dia.agendados}}</th>
+                                {% endfor%}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
