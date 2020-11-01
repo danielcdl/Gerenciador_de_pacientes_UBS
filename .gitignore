@@ -8,3 +8,6 @@ pacientes/migrations
 
 ubs/__pycache__
 ubs/settings.py
+
+agendamento/__pycache__
+agendamento/migrations
