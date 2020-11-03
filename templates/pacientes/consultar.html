@@ -7,7 +7,7 @@
 <div class="container mt-5 justify-content-md-center">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Buscar Pacientes</h5>
+            <h6 class="card-title">Buscar Pacientes</h6>
         </div>
         <div class="card-body">
             <form id="form_pesquisa" method="get">
@@ -15,7 +15,7 @@
                     <div class="col-md-4">
                         <label id="lb_tipo" for="tipo">Buscar por:</label>
                     </div>
-                    <div id="div_lb_dado" class="col-md-4" style="display: none">
+                    <div id="div_lb_dado" class="col-md-4">
                         <label id="lb_dado" for="dado"></label>
                     </div>
                 </div>
@@ -28,10 +28,9 @@
                             <option value="mae">Nome da mãe</option>
                             <option value="nascimento">Data de nascimento</option>
                             <option value="familia">Número de família</option>
-                            <option value="todos">Todos</option>
                         </select>
                     </div>
-                    <div id="div_dado" class="col-md-4" style="display: none">
+                    <div id="div_dado" class="col-md-4">
                         <input class="form-control" id="dado" name="dado" required="required">
                     </div>
                     <div id="div_botao" class="col-md-4">
@@ -41,10 +40,80 @@
             </form>
         </div>
     </div>
-</div>
-<div id="div_tabela">
 
+    {% if pacientes is not empty%}
+    <div class="card mt-5">
+        <div class="card-header">
+            <h5 class="card-title">Pacientes</h5>
+        </div>
+        {% if pacientes|length > 0 %}
+        <div class="card-body">
+            {% if paginado %}
+            <div class="d-flex justify-content-between">
+                {% if pacientes.has_previous %}
+                <a href="?pagina={{pacientes.previous_page_number}}"><< anterior</a>
+                {% else %}
+                <a name="pagina"><< anterior</a>
+                {% endif %}
+                <label>página {{ pacientes.number }} de {{ pacientes.paginator.num_pages }}</label>
+                {% if pacientes.has_next %}
+                <a href="?pagina={{pacientes.next_page_number}}">proxima >></a>
+                {% else %}
+                <a>proxima >></a>
+                {% endif %}
+            </div>
+            {% endif %}
+            <table id="tabela" class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Sus</th>
+                    <th>Mãe</th>
+                    <th>Nascimento</th>
+                    <th>Família</th>
+                    <th>Observação</th>
+                </tr>
+                </thead>
+                <tbody id="corpoTabela">
+                {% for paciente in pacientes %}
+                <tr>
+                    <th>{{paciente.nome|title}}</th>
+                    <th>{{paciente.sus|default:''}}</th>
+                    <th>{{paciente.mae|title|default:''}}</th>
+                    <th>{{paciente.nascimento|default:''|date:'d/m/Y'}}</th>
+                    <th>{{paciente.familia|default:''}}</th>
+                    <th>{{paciente.observação|default:''}}</th>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        {% else %}
+        <h5>Nenhum paciente encontrado.</h5>
+        {% endif %}
+        {% if paginado %}
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                {% if pacientes.has_previous %}
+                <a href="?pagina={{pacientes.previous_page_number}}"><< anterior</a>
+                {% else %}
+                <a name="pagina"><< anterior</a>
+                {% endif %}
+                <label>página {{ pacientes.number }} de {{ pacientes.paginator.num_pages }}</label>
+                {% if pacientes.has_next %}
+                <a href="?pagina={{pacientes.next_page_number}}">proxima >></a>
+                {% else %}
+                <a>proxima >></a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
+
+
 {% endblock %}
 
 {% block scripts %}

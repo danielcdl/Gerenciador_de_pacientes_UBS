@@ -1,14 +1,37 @@
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import View, TemplateView
+from django.core.paginator import Paginator
+from django.views.generic import View
 
 from pacientes.forms import PacienteForm
 from pacientes.models import Paciente
 
 
-class Consultar(TemplateView):
+class Consultar(View):
     template_name = "pacientes/consultar.html"
+
+    def get(self, request):
+        tipo = request.GET.get('tipo', '')
+        dado = request.GET.get('dado', '')
+        pagina = request.GET.get('pagina')
+        pacientes = Paciente.objetos.all()
+        paginado = False
+        if tipo != '' and dado != '':
+            if tipo == 'sus':
+                pacientes = pacientes.filter(sus=dado)
+            elif tipo == 'mae':
+                pacientes = pacientes.order_by('mae').filter(mae__icontains=dado)
+            elif tipo == 'nascimento':
+                pacientes = pacientes.filter(nascimento=dado)
+            elif tipo == 'familia':
+                pacientes = pacientes.filter(familia=dado)
+            else:
+                pacientes = pacientes.filter(nome__icontains=dado)
+        else:
+            paginacao = Paginator(pacientes, 10)
+            pacientes = paginacao.get_page(pagina)
+            paginado = True
+        return render(request, self.template_name, {'pacientes': pacientes, 'paginado': paginado})
 
 
 class Cadastro(View):
@@ -35,34 +58,15 @@ class Cadastro(View):
         if form.is_valid():
             form.save()
             mensagem['sucesso'] = 'Paciente cadastrado com sucesso'
-            return render(request,'pacientes/cadastro.html', {'mensagem': mensagem})
+            return render(request, 'pacientes/cadastro.html', {'mensagem': mensagem})
         else:
             self.context['form'] = form
-            return render(request, self.template_name, self.context,)
+            return render(request, self.template_name, self.context, )
 
     def get(self, request):
         form = PacienteForm(self.request.GET)
         self.context['form'] = form
         return render(request, self.template_name, self.context)
-
-
-def tabela_busca(request):
-    tipo = request.GET.get('tipo')
-    dado = request.GET.get('dado')
-    pacientes = Paciente.objetos.all()
-
-    if tipo != '' and dado != '':
-        if tipo == 'sus':
-            pacientes = pacientes.filter(sus=dado)
-        elif tipo == 'mae':
-            pacientes = pacientes.order_by('mae').filter(mae__icontains=dado)
-        elif tipo == 'nascimento':
-            pacientes = pacientes.filter(nascimento=dado)
-        elif tipo == 'familia':
-            pacientes = pacientes.filter(familia=dado)
-        else:
-            pacientes = pacientes.filter(nome__icontains=dado)
-    return render(request, 'pacientes/tabela_busca.html', {'pacientes': pacientes})
 
 
 def consultar_paciente(request):

@@ -11,7 +11,6 @@ class Paciente(Model):
         max_length=18,
         blank=True,
         null=True,
-        unique=True
     )
 
     nome = CharField(

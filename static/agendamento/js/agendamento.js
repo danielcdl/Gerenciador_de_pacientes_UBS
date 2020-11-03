@@ -24,6 +24,7 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (dados) {
                 let cadastrado = $('#cadastrado');
+                let msg = $('#msg');
                 if (dados.encontrado === true) {
                     console.log('encontrado');
                     cadastrado.attr('checked', 'checked');
@@ -32,7 +33,20 @@ $(document).ready(function () {
                     $('#id_turno').removeAttr('disabled');
                 } else {
                     cadastrado.removeAttr('checked');
+                    msg.text('Paciente não cadastrado. Cadastrar!');
+                    msg.show();
                 }
+            }
+        });
+    });
+
+    $('#id_data').on('click', function () {
+        $.ajax({
+            url: 'calendario/',
+            type: 'GET',
+            data: '?mes='+ ''+'&ano=',
+            success: function (tabela) {
+                $('#calendario').html(tabela);
             }
         });
     })

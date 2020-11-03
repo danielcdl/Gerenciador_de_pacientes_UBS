@@ -1,4 +1,7 @@
 .idea
+__pycache__
+migracao.py
+Banco.db
 db.sqlite3
 home/__pycache__
 home/migrations

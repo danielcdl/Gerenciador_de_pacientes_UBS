@@ -15,6 +15,7 @@
                 <fieldset class="col-lg">
                     <legend>Dados do agendamento</legend>
                     <input id="cadastrado" type="checkbox" value="cadastrado">
+                    <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
                     <form method="post">
                         {% csrf_token %}
                         <div class="input-group">
@@ -37,7 +38,7 @@
                                 <label for="{{form.data.id_for_label}}" class="input-group-text">
                                     {{ form.data.label }}</label>
                                 {% render_field form.data class+='form-control' type='date' disabled="disabled" %}
-                                <span class="date-icon" title="Escolha uma data"></span>
+                                <a href="#" class="date-icon" title="Escolha uma data">data</a>
                             </div>
                             <div class="input-group-prepend">
                                 <label for="{{form.turno.id_for_label}}" class="input-group-text">
