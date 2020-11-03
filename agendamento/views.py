@@ -11,7 +11,7 @@ from .models import DiaIndisponivel
 from .forms import AgendamentoForm
 
 
-class Agenda(View):
+class Agendar(View):
     tamplete_name = 'agendamento/agendamento.html'
 
     def get(self, request):
@@ -31,31 +31,30 @@ def calendario(request):
         else:
             data_fim = date(ano, mes + 1, 1)
 
-        primeiro_dia = date.weekday(data_inicio)
-        ultimo_dia = date.weekday(data_fim - timedelta(1))
 
-        dias = []
-        semana = []
-        for i in range(primeiro_dia, 0, -1):
-            dia = data_inicio - timedelta(i)
-            semana.append({'data': dia.strftime('%d/%m/%Y'), 'status': 'desabilitado', 'motivo': 'mes'})
+        ultimo_dia = date.weekday(data_fim - timedelta(1))
 
         agendamentos = list(Agendamento.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True))
         feriados = Feriado.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True)
         dias_indisponiveis = DiaIndisponivel.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True)
-        contador = primeiro_dia
+
         data = data_inicio
         incremento = timedelta(1)
         final = (data_fim - incremento).day
+
+        dias = []
+        primeiro_dia = date.weekday(data_inicio)
+        semana = (primeiro_dia+1) * [{'data': '', 'status': 'desabilitado', 'motivo': 'mes'}]
+        contador = primeiro_dia
         for i in range(final):
             agendados = agendamentos.count(data)
             data_formatada = data.strftime('%d/%m/%Y')
             if contador % 7 == 5:
-                semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'sabado'})
-            elif contador % 7 == 6:
-                semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'domingo'})
+                semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'sábado'})
                 dias.append(semana)
                 semana = []
+            elif contador % 7 == 6:
+                semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'domingo'})
             elif data in feriados:
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'feriado'})
             elif data in dias_indisponiveis:
@@ -63,13 +62,9 @@ def calendario(request):
             else:
                 semana.append({'data': data_formatada, 'status': 'disponivel', 'motivo': agendados})
 
-            if i == final - 1 and contador % 7 != 6:
+            if i == final - 1 and contador % 7 != 5:
                 dias.append(semana)
             data += incremento
             contador += 1
-
-        for i in range(ultimo_dia, 6):
-            dia = data_inicio + timedelta(i)
-            dias[-1].append({'data': dia.strftime('%d/%m/%Y'), 'status': 'desabilitado', 'motivo': 'mes'})
 
         return render(request, 'agendamento/calendario.html', {'calendario': dias})

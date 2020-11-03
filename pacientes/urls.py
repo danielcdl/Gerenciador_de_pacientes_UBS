@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import Consultar, Cadastro, tabela_busca, consultar_paciente
+from .views import Consultar, Cadastro, tabela_busca, consultar_paciente, autocomplete_pacientes
 
 app_name = 'pacientes'
 

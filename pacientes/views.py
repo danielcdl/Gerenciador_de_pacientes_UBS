@@ -88,3 +88,10 @@ def consultar_paciente(request):
         else:
             dados = {'encontrado': False}
         return JsonResponse(dados)
+
+
+def autocomplete_pacientes(request):
+    if request.method == "GET":
+        nome = request.GET.get('nome')
+        pacientes = Paciente.objetos.filter(nome__istartswith=nome).values_list('id', 'nome')[:5]
+        return JsonResponse(dict(pacientes))

@@ -14,60 +14,52 @@
             <div class="card-body">
                 <fieldset class="col-lg">
                     <legend>Dados do agendamento</legend>
+                    <input id="cadastrado" type="checkbox" value="cadastrado">
                     <form method="post">
                         {% csrf_token %}
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <label for="{{form.paciente.id_for_label}}" class="input-group-text">{{ form.paciente.label}}</label>
-                                {% render_field form.paciente class+='form-control'%}
+                                <label for="{{form.nome.id_for_label}}" class="input-group-text">
+                                    {{ form.nome.label }}</label>
+                                {% render_field form.nome class+="form-control" list="pacientes" %}
+                                <datalist id="pacientes">
+                                </datalist>
+                                <a href="{% url 'pacientes:cadastro' %}" type="button" class="btn btn-primary ml-1">
+                                    Novo
+                                </a>
                             </div>
-                             <div class="input-group-prepend">
-                                <label for="{{form.profissional.id_for_label}}" class="input-group-text">{{ form.profissional.label}}</label>
-                                {% render_field form.profissional class+='form-control'%}
+                            <div class="input-group-prepend">
+                                <label for="{{form.profissional.id_for_label}}" class="input-group-text">
+                                    {{ form.profissional.label }}</label>
+                                {% render_field form.profissional class+='form-control' disabled="disabled" %}
                             </div>
-                             <div class="input-group-prepend">
-                                <label for="{{form.data.id_for_label}}" class="input-group-text">{{ form.data.label}}</label>
-                                {% render_field form.data class+='form-control' type='date' %}
-                                 <span class="date-icon" title="Escolha uma data"></span>
+                            <div class="input-group-prepend">
+                                <label for="{{form.data.id_for_label}}" class="input-group-text">
+                                    {{ form.data.label }}</label>
+                                {% render_field form.data class+='form-control' type='date' disabled="disabled" %}
+                                <span class="date-icon" title="Escolha uma data"></span>
                             </div>
-                             <div class="input-group-prepend">
-                                <label for="{{form.turno.id_for_label}}" class="input-group-text">{{ form.turno.label}}</label>
-                                {% render_field form.turno class+='form-control'%}
+                            <div class="input-group-prepend">
+                                <label for="{{form.turno.id_for_label}}" class="input-group-text">
+                                    {{ form.turno.label }}</label>
+                                {% render_field form.turno class+='form-control' disabled="disabled" %}
                             </div>
                         </div>
                         <div class="card-body" align="center">
-                            <button id="botao" class="btn btn-primary">Agendar</button>
+                            <button id="botao_agendar" class="btn btn-primary">Agendar</button>
                         </div>
                     </form>
                 </fieldset>
-                <div id="calendario" class="calendar">
-                    <table id="tabela" class="table table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Domingo</th>
-                                <th>Segunda</th>
-                                <th>Terça</th>
-                                <th>Quarta</th>
-                                <th>Quinta</th>
-                                <th>Sexta</th>
-                                <th>Sábado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for semana in calendario%}
-                            <tr>
-                                {% for dia in semana%}
-                                <th>{{dia.dia}}{{dia.agendados}}</th>
-                                {% endfor%}
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="calendario" class="calendar">
         </div>
     </div>
 </div>
 {% endblock %}
 {% block scripts %}
+<script src="{% static 'agendamento/js/agendamento.js' %}"></script>
+<script src="{% static 'agendamento/js/calendario.js' %}"></script>
 {% endblock %}

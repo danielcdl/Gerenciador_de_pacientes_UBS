@@ -1,31 +1,46 @@
-<table id="tabela" class="table table-striped">
+{% extends 'layouts/base.html'%}
+{% load static %}
+{% block conteudo %}
+<table id="tabela" class="table table-bordered">
     <thead class="thead-dark">
-        <tr>
-            <th>Segunda</th>
-            <th>Terça</th>
-            <th>Quarta</th>
-            <th>Quinta</th>
-            <th>Sexta</th>
-            <th>Sábado</th>
-            <th>Domingo</th>
-        </tr>
+    <tr>
+        <th>Domingo</th>
+        <th>Segunda</th>
+        <th>Terça</th>
+        <th>Quarta</th>
+        <th>Quinta</th>
+        <th>Sexta</th>
+        <th>Sábado</th>
+    </tr>
     </thead>
     <tbody>
     {% for semana in calendario %}
-        <tr>
-            {% for dia in semana%}
-            <th>
-                <h2>{{dia.data|slice:"0:2"}}</h2>
-                {% if dia.status == 'disponivel' %}
-                    {{dia.motivo}} agendados
-                {% else %}
-                    {% if dia.motivo != 'mes' %}
-                        {{dia.motivo}}
-                    {% endif %}
-                {% endif %}
-            </th>
-            {% endfor%}
-        </tr>
+    <tr>
+        {% for dia in semana%}
+        {% if dia.status == 'disponivel'%}
+        <th class="table-primary">
+            <a  href="#" onclick="selecionarData('{{dia.data}}')">
+        {% else %}
+        <th class="table-active">
+            <a>
+        {% endif %}
+            <h2>{{dia.data|slice:"0:2"}}</h2>
+            </a>
+        {% if dia.status == 'disponivel' %}
+        {{dia.motivo}} agendado{{dia.motivo|pluralize}}
+        {% else %}
+        {% if dia.motivo != 'mes' %}
+        {{dia.motivo}}
+        {% endif %}
+        {% endif %}
+        </th>
+        {% endfor%}
+    </tr>
     {% endfor %}
     </tbody>
 </table>
+
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'agendamento/js/calendario.js' %}"></script>
+{% endblock %}
