@@ -39,6 +39,15 @@ class Paciente(Model):
         blank=True
     )
 
+    objetos = Manager()
+
+    class Meta:
+        ordering = ['nome']
+
+
+class Familia(Model):
+    familia = PositiveIntegerField()
+
     tipo_logradouro = CharField(
         max_length=100,
         null=False,
@@ -77,4 +86,4 @@ class Paciente(Model):
     objetos = Manager()
 
     class Meta:
-        ordering = ['nome']
+        ordering = ['familia']

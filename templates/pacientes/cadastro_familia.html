@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}UBS PINHO{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-sm-6 card">
+            <div class="card-header">
+                <h3 class="display-6">Cadastro da Família</h3>
+            </div>
+            <div class="card-body">
+                <fieldset class="col-lg">
+                    <legend>Dados da Família</legend>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <label for="id_familia" class="input-group-text">
+                                    Familia</label>
+                                <input type="number" name="familia" min="0" class="form-control" id="id_familia">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_tipo_logradouro" class="input-group-text">
+                                    Tipo logradouro</label>
+                                <input type="text" name="tipo_logradouro" maxlength="100" class="form-control"
+                                       id="id_tipo_logradouro">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_nome_logradouro" class="input-group-text">
+                                    Nome logradouro</label>
+                                <input type="text" name="nome_logradouro" maxlength="100" class="form-control"
+                                       id="id_nome_logradouro">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_numero" class="input-group-text">
+                                    Numero</label>
+                                <input type="number" name="numero" min="0" class="form-control" id="id_numero">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_bairro" class="input-group-text">
+                                    Bairro</label>
+                                <input type="text" name="bairro" maxlength="100" class="form-control" id="id_bairro">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_complemento" class="input-group-text">
+                                    Complemento</label>
+                                <input type="text" name="complemento" maxlength="100" class="form-control"
+                                       id="id_complemento">
+                            </div>
+
+                            <div class="input-group-prepend">
+                                <label for="id_cidade" class="input-group-text">
+                                    Cidade</label>
+                                <input type="text" name="cidade" maxlength="100" class="form-control" id="id_cidade">
+                            </div>
+                        </div>
+                        <div class="card-body" align="center">
+                            <button id="botao" class="btn btn-primary">CADASTRAR</button>
+                            <button id="reset" type="reset" class="btn btn-primary">LIMPAR</button>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'pacientes/js/cadastro_familia.js' %}"></script>
+{% endblock %}

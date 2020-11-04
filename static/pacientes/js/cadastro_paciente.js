@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $('#sus').on('blur', function () {
-        if (this.value) {
+    $('#id_sus').on('change', function () {
+        if (this.value !== '') {
             $.ajax({
                 url: "dados/",
                 type: "GET",
@@ -11,11 +11,11 @@ $(document).ready(function () {
                         let reset = $('#reset');
                         let msg = $('#msg');
                         $('#encontrado').attr('value', 'encontrado');
-                        $('#nome').val(dados.nome);
-                        $('#mae').val(dados.mae);
-                        $('#nascimento').val(dados.nascimento);
-                        $('#familia').val(dados.familia);
-                        $('#observacao').val(dados.observacao);
+                        $('#id_nome').val(dados.nome);
+                        $('#id_mae').val(dados.mae);
+                        $('#id_nascimento').val(dados.nascimento);
+                        $('#id_familia').val(dados.familia);
+                        $('#id_observacao').val(dados.observacao);
 
                         msg.attr('class', 'alert alert-success');
                         msg.text('Paciente encontrado!');
@@ -34,7 +34,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#nome').on('blur', function () {
+    $('#id_nome').on('change', function () {
         if (this.value !== '' && $('#encontrado').val() !== 'encontrado') {
             $.ajax({
                 url: "dados/",
@@ -43,14 +43,14 @@ $(document).ready(function () {
                 success: function (dados) {
                     let botao = $('#botao');
                     if (dados.encontrado === true) {
-                        let sus = $('#sus');
+                        let sus = $('#id_sus');
                         if (sus !== dados.sus) {
                             sus.val(dados.sus);
                         }
-                        $('#mae').val(dados.mae);
-                        $('#nascimento').val(dados.nascimento);
-                        $('#familia').val(dados.familia);
-                        $('#observacao').val(dados.observacao);
+                        $('#id_mae').val(dados.mae);
+                        $('#id_nascimento').val(dados.nascimento);
+                        $('#id_familia').val(dados.familia);
+                        $('#id_observacao').val(dados.observacao);
                         botao.text('ATUALIZAR');
                         let msg = $('#msg');
                         msg.attr('class', 'alert alert-success');

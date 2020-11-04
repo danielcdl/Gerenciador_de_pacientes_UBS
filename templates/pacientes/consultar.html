@@ -71,7 +71,7 @@
                     <th>Mãe</th>
                     <th>Nascimento</th>
                     <th>Família</th>
-                    <th>Observação</th>
+                    <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody id="corpoTabela">
@@ -82,7 +82,10 @@
                     <th>{{paciente.mae|title|default:''}}</th>
                     <th>{{paciente.nascimento|default:''|date:'d/m/Y'}}</th>
                     <th>{{paciente.familia|default:''}}</th>
-                    <th>{{paciente.observação|default:''}}</th>
+                    <th>
+                        <a href ="editar/{{paciente.id}}"><span title="Editar"><i class="fas fa-edit"></i></span></a>
+                        <a href="transferir/{{paciente.id}}" class="delete-btn"><span title="Transferir"><i class="fas fa-minus-circle"></i></span></a>
+                    </th>
                 </tr>
                 {% endfor %}
                 </tbody>

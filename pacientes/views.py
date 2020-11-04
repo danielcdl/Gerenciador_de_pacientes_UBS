@@ -1,10 +1,13 @@
-from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
+from django.views.generic import TemplateView
 from django.views.generic import View
 
 from pacientes.forms import PacienteForm
+from pacientes.forms import FamiliaForm
 from pacientes.models import Paciente
+from pacientes.models import Familia
 
 
 class Consultar(View):
@@ -34,8 +37,12 @@ class Consultar(View):
         return render(request, self.template_name, {'pacientes': pacientes, 'paginado': paginado})
 
 
-class Cadastro(View):
+class Cadastro(TemplateView):
     template_name = 'pacientes/cadastro.html'
+
+
+class CadastroPaciente(View):
+    template_name = 'pacientes/cadastro_paciente.html'
     context = {}
     form_class = PacienteForm
 
@@ -43,22 +50,21 @@ class Cadastro(View):
         sus = self.request.POST.get('sus', '').strip()
         nome = self.request.POST.get('nome', '').lower().strip()
         paciente = None
-        mensagem = {}
-        if sus:
+
+        if sus != '':
             paciente = Paciente.objetos.filter(sus=sus).last()
 
         if sus == '' or paciente is None:
-            paciente = Paciente.objetos.filter(nome__iexact=nome)
+            paciente = Paciente.objetos.filter(nome__iexact=nome).last()
 
-        if paciente:
+        if paciente is not None:
             form = self.form_class(request.POST, instance=paciente)
         else:
             form = self.form_class(request.POST)
 
         if form.is_valid():
             form.save()
-            mensagem['sucesso'] = 'Paciente cadastrado com sucesso'
-            return render(request, 'pacientes/cadastro.html', {'mensagem': mensagem})
+            return redirect('pacientes:cadastro_paciente')
         else:
             self.context['form'] = form
             return render(request, self.template_name, self.context, )
@@ -69,26 +75,48 @@ class Cadastro(View):
         return render(request, self.template_name, self.context)
 
 
+class CadastroFamilia(View):
+    template_name = 'pacientes/cadastro_familia.html'
+    context = {}
+    form_class = FamiliaForm
+
+    def post(self, request):
+        n_familia = request.POST.get('familia')
+        familia = Familia.objetos.filter(familia=n_familia).last()
+
+        if familia is not None:
+            form = self.form_class(request.POST, instance=familia)
+        else:
+            form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('pacientes:paciente_cadastro')
+        else:
+            self.context['form'] = form
+            return render(request, self.template_name, self.context)
+
+    def get(self, request):
+        self.context['form'] = self.form_class
+        return render(request, self.template_name, self.context)
+
+
 def consultar_paciente(request):
     if request.method == "GET":
-        sus = request.GET.get('sus')
-        nome = request.GET.get('nome')
+        sus = request.GET.get('sus', '')
+        nome = request.GET.get('nome', '')
+        familia = request.GET.get('familia', '')
 
-        if sus:
-            paciente = Paciente.objetos.filter(sus=sus).last()
+        if sus != '':
+            dados = Paciente.objetos.filter(sus=sus).values().last()
+        elif nome != '':
+            dados = Paciente.objetos.filter(nome__iexact=nome).values().last()
         else:
-            paciente = Paciente.objetos.filter(nome__iexact=nome).last()
+            dados = Familia.objetos.filter(familia=familia).values().last()
 
-        if paciente is not None:
-            dados = {
-                'sus': paciente.sus,
-                'nome': paciente.nome,
-                'mae': paciente.mae,
-                'nascimento': paciente.nascimento,
-                'familia': paciente.familia,
-                'observacao': paciente.observacao,
-                'encontrado': True
-            }
+        if dados is not None:
+            dados = dict(dados)
+            dados['encontrado'] = True
         else:
             dados = {'encontrado': False}
         return JsonResponse(dados)

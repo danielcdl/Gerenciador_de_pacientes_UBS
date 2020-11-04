@@ -1,68 +1,40 @@
+<!-- Estendemos do template base -->
 {% extends "layouts/base.html" %}
-{% load static %}
 
+<!-- Bloco que define o <title></title> da nossa página -->
 {% block title %}UBS PINHO{% endblock %}
 
+<!-- Bloco de conteúdo da nossa página -->
 {% block conteudo %}
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-sm-6 card">
-            <div class="card-header">
-                <h3 class="display-6">Cadastro de Pacientes</h3>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Cadastros de Pacientes</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Faça aqui os cadastros ou aletrações de dados dos pacientes.
+                    </p>
+                    <a href="{% url 'pacientes:consultar' %}" class="btn btn-primary">CONSULTAR</a>
+                    <a href="{% url 'pacientes:cadastro' %}" class="btn btn-primary">ALTERAR/CADASTRAR</a>
+                </div>
             </div>
-            <div class="card-body">
-                <fieldset class="col-lg">
-                    <legend>Dados do Paciente</legend>
-                    {% if mensagem.sucesso|length > 0 %}
-                        <label id="msg" class="text-center alert alert-success">{{mensagem.sucesso}}</label>
-                    {% else %}
-                        <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
-                    {% endif %}
-                    <input id="encontrado" type="checkbox" hidden>
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <label for="sus" class="input-group-text">SUS</label>
-                                <input id="sus" name="sus" type="text" class="form-control" maxlength="15"
-                                       placeholder="999 9999 9999 9999">
-                            </div>
-                            <div class="input-group-prepend">
-                                <label for="nome" class="input-group-text">NOME</label>
-                                <input id="nome" name="nome" type="text" style="text-transform:uppercase"
-                                       class="form-control" placeholder="Nome do paciente">
-                            </div>
-                            <div class="input-group-prepend">
-                                <label for="mae" class="input-group-text">MÃE</label>
-                                <input id="mae" name="mae" type="text" style="text-transform:uppercase"
-                                       class="form-control" placeholder="Nome da mãe">
-                            </div>
-                            <div class="input-group-prepend">
-                                <label for="nascimento" class="input-group-text">NASCIMENTO</label>
-                                <input id="nascimento" name="nascimento" type="date" class="form-control">
-                            </div>
-                            <div class="input-group-prepend">
-                                <label for="familia" class="input-group-text">Nº FAMILIA</label>
-                                <input id="familia" name="familia" type="number" class="form-control"
-                                       placeholder="Familia">
-                            </div>
-                            <div class="input-group-prepend">
-                                <label for="observacao" class="input-group-text">OBSERVAÇÕES</label>
-                                <input id="observacao" name="observacao" type="text" class="form-control"
-                                       placeholder="Observação">
-                            </div>
-                        </div>
-                        <div class="card-body" align="center">
-                            <button id="botao" class="btn btn-primary" style="display: none"></button>
-                            <button id="reset" type="reset" class="btn btn-primary" style="display: none">LIMPAR</button>
-                        </div>
-                    </form>
-                </fieldset>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Cadastros das Familias</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Faça aqui os cadastramentos das famílias.
+                    </p>
+                    <a href="{% url 'pacientes:cadastro_familia' %}" class="btn btn-primary">AGENDAMENTO</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
-{% block scripts %}
-<script src="{% static 'pacientes/js/cadastro.js' %}"></script>
 {% endblock %}
