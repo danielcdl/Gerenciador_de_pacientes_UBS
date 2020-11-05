@@ -26,13 +26,15 @@ $(document).ready(function () {
                 let cadastrado = $('#cadastrado');
                 let msg = $('#msg');
                 if (dados.encontrado === true) {
-                    console.log('encontrado');
                     cadastrado.attr('checked', 'checked');
                     $('#id_profissional').removeAttr('disabled');
                     $('#id_data').removeAttr('disabled');
                     $('#id_turno').removeAttr('disabled');
+                    msg.attr('class', 'text-center alert alert-success');
+                    msg.text('Paciente encontrado!');
+                    msg.show();
                 } else {
-                    cadastrado.removeAttr('checked');
+                    cadastrado.removeAttr('value');
                     msg.text('Paciente não cadastrado. Cadastrar!');
                     msg.show();
                 }
@@ -41,13 +43,24 @@ $(document).ready(function () {
     });
 
     $('#id_data').on('click', function () {
+        let data = new Date;
+
         $.ajax({
             url: 'calendario/',
             type: 'GET',
-            data: '?mes='+ ''+'&ano=',
+            data: 'mes='+ (data.getMonth() + 1) +'&ano=' + data.getFullYear(),
             success: function (tabela) {
                 $('#calendario').html(tabela);
             }
         });
+    });
+
+    $('#botao_agendar').on('click', function () {
+        if ($('#cadastrado').prop('checked') !== true) {
+            let msg = $('#msg');
+            msg.text('Paciente não cadastrado. Cadastrar!');
+            msg.show();
+            return false
+        }
     })
 });

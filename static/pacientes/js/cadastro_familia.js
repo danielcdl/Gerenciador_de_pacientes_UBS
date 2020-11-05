@@ -12,8 +12,13 @@ $(document).ready(function () {
                     $('#id_bairro').val(dados.bairro);
                     $('#id_complemento').val(dados.complemento);
                     $('#id_cidade').val(dados.cidade);
+                    $('#botao').text('ATUALIZAR');
                 }
             }
         })
     });
+
+    $('#reset').on('click', function () {
+        $('#botao').text('CADASTRAR');
+    })
 });

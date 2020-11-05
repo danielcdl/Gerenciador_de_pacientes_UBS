@@ -1,68 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    {% load static %}
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        <!-- Title -->
-        <title>{% block title %}CADASTRAMENTO UBS PINHO{% endblock %}</title>
+    <!-- Title -->
+    <title>{% block title %}CADASTRAMENTO UBS PINHO{% endblock %}</title>
 
-        <!-- icone -->
-        <link rel="shortcut icon" href="{% static 'pacientes/img/logo.jpg' %}" type="image/jpg">
+    <!-- icone -->
+    <link rel="shortcut icon" href="{% static 'home/img/logo.jpg' %}" type="image/jpg">
 
-        <!-- Arquivos CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Arquivos CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+          integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 
+    {% block styles %}{% endblock %}
+</head>
 
-        {% block styles %}{% endblock %}
-    </head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'home:index' %}">
+        <img src="{% static 'home/img/logo.jpg' %}" height="45px" alt="logo">
+    </a>
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <body>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'home:index' %}">
-              <img src="{% static 'pacientes/img/logo2.png' %}" height="45px" alt="logo">
-            </a>
-            <button class="navbar-toggler" type="button"
-                data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a href="{% url 'home:index' %}" class="nav-link">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="pacienteDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">Paciente</a>
+                <div class="dropdown-menu" aria-labelledby="pacienteDropdown">
+                    <a class="dropdown-item" href="{% url 'pacientes:consultar' %}" class="nav-link">Buscar
+                        Pacientes</a>
+                    <a class="dropdown-item" href="{% url 'pacientes:cadastro_paciente' %}" class="nav-link">Cadastrar
+                        Pacientes</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="familiaDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">Família</a>
+                <div class="dropdown-menu" aria-labelledby="familiaDropdown">
+                    <a href="{% url 'pacientes:cadastro_familia' %}" class="nav-link">Cadastrar Família</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'agendamento:agendar' %}" class="nav-link">Agendamentos</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav float-right">
+            <img alt="UBS PINHO" class="img-thumbnail mb-3" src="{% static 'home/img/logoposto.jpg' %}"
+                 width=400>
+        </ul>
+    </div>
+</nav>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a href="{% url 'home:index' %}" class="nav-link" >Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'pacientes:consultar' %}" class="nav-link" >Buscar Pacientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'pacientes:cadastro' %}" class="nav-link" >Cadastro de Pacientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'agendamento:agendar' %}" class="nav-link" >Agendamentos</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav float-right">
-                    <img alt="UBS PINHO" class="img-thumbnail mb-3" src="{% static 'pacientes/img/logo.jpg' %}"
-                         width=400>
-                </ul>
-            </div>
-        </nav>
+{% block conteudo %}{% endblock %}
 
-        {% block conteudo %}{% endblock %}
-
-        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        {% block scripts %}
-        {% endblock %}
-    </body>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+{% block scripts %}
+{% endblock %}
+</body>
 </html>

@@ -1,44 +1,59 @@
 {% extends 'layouts/base.html'%}
 {% load static %}
 {% block conteudo %}
-<table id="tabela" class="table table-bordered">
-    <thead class="thead-dark">
-    <tr>
-        <th>Domingo</th>
-        <th>Segunda</th>
-        <th>Terça</th>
-        <th>Quarta</th>
-        <th>Quinta</th>
-        <th>Sexta</th>
-        <th>Sábado</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for semana in calendario %}
-    <tr>
-        {% for dia in semana%}
-        {% if dia.status == 'disponivel'%}
-        <th class="table-primary">
-            <a  href="#" onclick="selecionarData('{{dia.data}}')">
-        {% else %}
-        <th class="table-active">
-            <a>
-        {% endif %}
-            <h2>{{dia.data|slice:"0:2"}}</h2>
-            </a>
-        {% if dia.status == 'disponivel' %}
-        {{dia.motivo}} agendado{{dia.motivo|pluralize}}
-        {% else %}
-        {% if dia.motivo != 'mes' %}
-        {{dia.motivo}}
-        {% endif %}
-        {% endif %}
-        </th>
-        {% endfor%}
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <h6>Selecione uma data:</h6>
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <h4>{{mes}}</h4>
+                    <h3>{{ano}}</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="tabela" class="table table-bordered">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>Domingo</th>
+                        <th>Segunda</th>
+                        <th>Terça</th>
+                        <th>Quarta</th>
+                        <th>Quinta</th>
+                        <th>Sexta</th>
+                        <th>Sábado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for semana in calendario %}
+                    <tr>
+                        {% for dia in semana%}
+                        {% if dia.status == 'disponivel'%}
+                        <th class="table-primary">
+                            <a href="{{dia.data}}">
+                                {% else %}
+                        <th class="table-active">
+                            <a>
+                                {% endif %}
+                                <h2>{{dia.data|slice:"0:2"}}</h2>
+                            </a>
+                            {% if dia.status == 'disponivel' %}
+                            {{dia.motivo.manha}} agendado{{dia.motivo|pluralize}}
+                            {% else %}
+                            {% if dia.motivo != 'mes' %}
+                            {{dia.motivo}}
+                            {% endif %}
+                            {% endif %}
+                        </th>
+                        {% endfor%}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 {% block scripts %}
