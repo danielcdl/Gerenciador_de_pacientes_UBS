@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
@@ -101,18 +101,19 @@ class CadastroFamilia(View):
         return render(request, self.template_name, self.context)
 
 
-def consultar_paciente(request):
+def consultar_paciente(request, **kargs):
     if request.method == "GET":
-        sus = request.GET.get('sus', '')
-        nome = request.GET.get('nome', '')
-        familia = request.GET.get('familia', '')
+        tipo = kargs['tipo']
+        dado = kargs['dado']
 
-        if sus != '':
-            dados = Paciente.objetos.filter(sus=sus).values().last()
-        elif nome != '':
-            dados = Paciente.objetos.filter(nome__iexact=nome).values().last()
+        if tipo == 'sus':
+            dados = Paciente.objetos.filter(sus=dado).values().last()
+        elif tipo == 'nome':
+            dados = Paciente.objetos.filter(nome__iexact=dado).values().last()
+        elif tipo == 'familia':
+            dados = Familia.objetos.filter(familia=dado).values().last()
         else:
-            dados = Familia.objetos.filter(familia=familia).values().last()
+            raise Http404('Tipo não encontrado')
 
         if dados is not None:
             dados = dict(dados)
@@ -122,8 +123,8 @@ def consultar_paciente(request):
         return JsonResponse(dados)
 
 
-def autocomplete_pacientes(request):
+def autocomplete_pacientes(request, **kargs):
     if request.method == "GET":
-        nome = request.GET.get('nome')
+        nome = kargs['nome']
         pacientes = Paciente.objetos.filter(nome__istartswith=nome).values_list('id', 'nome')[:5]
         return JsonResponse(dict(pacientes))

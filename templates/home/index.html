@@ -6,7 +6,7 @@
 
 <!-- Bloco de conteúdo da nossa página -->
 {% block conteudo %}
-<div class="container mt-5">
+<div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="card">
@@ -44,7 +44,7 @@
                     <p>
                         Faça aqui os agendamentos dos pacientes.
                     </p>
-                    <a href="{% url 'agendamento:agendar' %}" class="btn btn-primary">AGENDAMENTO</a>
+                    <a href="{% url 'agendamento:index' %}" class="btn btn-primary">AGENDAMENTO</a>
                 </div>
             </div>
         </div>

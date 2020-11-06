@@ -2,7 +2,8 @@ from datetime import datetime
 from datetime import date
 from datetime import timedelta
 
-from django.views.generic import View
+from django.http import Http404
+from django.views.generic import View, TemplateView
 from django.shortcuts import render
 
 from .models import Agendamento
@@ -11,22 +12,19 @@ from .models import DiaIndisponivel
 from .forms import AgendamentoForm
 
 
-class Agendar(View):
-    tamplete_name = 'agendamento/agendamento.html'
-
-    def get(self, request):
-        form = AgendamentoForm()
-        return render(request, self.tamplete_name, {'form': form})
+class Index(TemplateView):
+    template_name = 'agendamento/index.html'
 
 
-def calendario(request):
-    if request.method == 'GET':
-        mes = request.GET.get('mes')
-        ano = request.GET.get('ano')
+class Calendario(View):
+    def get(self, request, **kargs):
+        profissional = kargs['profissional']
+        if profissional not in ('med', 'enf'):
+            raise Http404("profissional não existe")
 
-        if mes.isdigit() and ano.isdigit():
-            mes = int(mes)
-            ano = int(ano)
+        if 'mes' and 'ano' in kargs:
+            mes = int(kargs['mes'])
+            ano = int(kargs['ano'])
         else:
             hoje = datetime.now()
             mes = hoje.month
@@ -38,9 +36,11 @@ def calendario(request):
         else:
             data_fim = date(ano, mes + 1, 1)
 
-        agendamentos = list(Agendamento.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', 'turno'))
+        agendamentos = list(Agendamento.objetos.filter(profissional=profissional, data__gte=data_inicio,
+                                                       data__lt=data_fim).values_list('data', 'turno'))
         feriados = list(Feriado.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True))
-        dias_indisponiveis = list(DiaIndisponivel.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True))
+        dias_indisponiveis = list(
+            DiaIndisponivel.objetos.filter(data__gte=data_inicio, data__lt=data_fim).values_list('data', flat=True))
 
         data = data_inicio
         incremento = timedelta(1)
@@ -54,8 +54,8 @@ def calendario(request):
             semana = []
         contador = primeiro_dia
         for i in range(final):
-            agend_manha = agendamentos.count((data, 'manha'))
-            agend_tarde = agendamentos.count((data, 'tarde'))
+            agend_manha = agendamentos.count((data, 'M'))
+            agend_tarde = agendamentos.count((data, 'T'))
             data_formatada = data.strftime('%d-%m-%Y')
             if contador % 7 == 5:
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'sábado'})
@@ -68,12 +68,24 @@ def calendario(request):
             elif data in dias_indisponiveis:
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'indisponível'})
             else:
-                semana.append({'data': data_formatada, 'status': 'disponivel', 'motivo': {'manha':agend_manha, 'tarde': agend_tarde}})
+                semana.append({'data': data_formatada, 'status': 'disponivel',
+                               'motivo': {'manha': agend_manha, 'tarde': agend_tarde}})
 
             if i == final - 1 and contador % 7 != 5:
                 dias.append(semana)
             data += incremento
             contador += 1
-        meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril','Maio', 'Junho',
-                 'Julho', 'Agosto', 'Setembro','Outubro', 'Novembro', 'Dezembro']
-        return render(request, 'agendamento/calendario.html', {'calendario': dias, 'mes': meses[mes-1], 'ano': ano})
+        meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+        return render(request, 'agendamento/calendario.html', {'calendario': dias, 'mes': meses[mes - 1], 'ano': ano})
+
+
+class Agendar(View):
+    tamplete_name = 'agendamento/agendar.html'
+
+    def get(self, request, **kargs):
+        data = kargs['data'].replace('-', '/')
+        turno = kargs['turno']
+        profissional = kargs['profissional']
+        form = AgendamentoForm(initial={'data': data, 'turno': turno, 'profissional': profissional})
+        return render(request, self.tamplete_name, {'form': form})

@@ -3,9 +3,8 @@ $(document).ready(function () {
     nome.keyup(function () {
         if (this.value.length > 2) {
             $.ajax({
-                url: "autocomplete/",
+                url: "/pacientes/autocomplete/" + nome.val(),
                 type: "GET",
-                data: $(this).serialize(),
                 success: function (dados) {
                     let opcoes = '';
                     for (let paciente in dados) {
@@ -19,38 +18,22 @@ $(document).ready(function () {
 
     nome.on('blur', function () {
         $.ajax({
-            url: "busca/",
+            url: "/pacientes/nome/" + nome.val(),
             type: "GET",
-            data: $(this).serialize(),
             success: function (dados) {
                 let cadastrado = $('#cadastrado');
                 let msg = $('#msg');
                 if (dados.encontrado === true) {
-                    cadastrado.attr('checked', 'checked');
-                    $('#id_profissional').removeAttr('disabled');
-                    $('#id_data').removeAttr('disabled');
-                    $('#id_turno').removeAttr('disabled');
+                    cadastrado.prop('checked', true);
                     msg.attr('class', 'text-center alert alert-success');
                     msg.text('Paciente encontrado!');
                     msg.show();
                 } else {
-                    cadastrado.removeAttr('value');
+                    cadastrado.prop('checked', false);
+                    msg.attr('class', 'text-center alert alert-danger');
                     msg.text('Paciente não cadastrado. Cadastrar!');
                     msg.show();
                 }
-            }
-        });
-    });
-
-    $('#id_data').on('click', function () {
-        let data = new Date;
-
-        $.ajax({
-            url: 'calendario/',
-            type: 'GET',
-            data: 'mes='+ (data.getMonth() + 1) +'&ano=' + data.getFullYear(),
-            success: function (tabela) {
-                $('#calendario').html(tabela);
             }
         });
     });

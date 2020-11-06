@@ -1,37 +1,33 @@
-<!-- Estendemos do template base -->
 {% extends "layouts/base.html" %}
 
-<!-- Bloco que define o <title></title> da nossa página -->
 {% block title %}UBS PINHO{% endblock %}
 
-<!-- Bloco de conteúdo da nossa página -->
 {% block conteudo %}
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Cadastros de Pacientes</h3>
+                    <h3 class="card-title">Agenda do Clínico Geral</h3>
                 </div>
                 <div class="card-body">
                     <p>
-                        Faça aqui os cadastros ou aletrações de dados dos pacientes.
+                        Faça aqui os agendamentos para Clínico Geral.
                     </p>
-                    <a href="{% url 'pacientes:consultar' %}" class="btn btn-primary">CONSULTAR</a>
-                    <a href="{% url 'pacientes:cadastro' %}" class="btn btn-primary">ALTERAR/CADASTRAR</a>
+                    <a href="{% url 'agendamento:calendario_atual' 'med' %}" class="btn btn-primary">AGENDAR</a>
                 </div>
             </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Cadastros das Familias</h3>
+                    <h3 class="card-title">Agenda de Enfermagem</h3>
                 </div>
                 <div class="card-body">
                     <p>
-                        Faça aqui os cadastramentos das famílias.
+                        Faça aqui os agendamentos para Enfermagem.
                     </p>
-                    <a href="{% url 'pacientes:cadastro_familia' %}" class="btn btn-primary">AGENDAMENTO</a>
+                    <a href="{% url 'agendamento:calendario_atual' 'enf' %}" class="btn btn-primary">AGENDAR</a>
                 </div>
             </div>
         </div>

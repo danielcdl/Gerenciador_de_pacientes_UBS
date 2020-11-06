@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from .views import Consultar
 from .views import Cadastro
 from .views import CadastroPaciente
 from .views import CadastroFamilia
 from .views import consultar_paciente
+from .views import autocomplete_pacientes
 
 app_name = 'pacientes'
 
@@ -13,6 +14,6 @@ urlpatterns = [
     path('cadastro/', Cadastro.as_view(), name='cadastro'),
     path('cadpaciente/', CadastroPaciente.as_view(), name='cadastro_paciente'),
     path('cadfamilia/', CadastroFamilia.as_view(), name='cadastro_familia'),
-    path('cadpaciente/dados/', consultar_paciente),
-    path('cadfamilia/dados/', consultar_paciente),
+    re_path(r'autocomplete/(?P<nome>[a-z\s]+)/$', autocomplete_pacientes),
+    re_path(r'^(?P<tipo>[a-z]+)/(?P<dado>[a-z0-9\s]+)/$', consultar_paciente),
 ]

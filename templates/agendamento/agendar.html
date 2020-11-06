@@ -1,0 +1,87 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}UBS PINHO{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="display-6">Cadastro de Pacientes</h3>
+                </div>
+                <div class="card-body">
+                    <fieldset class="col-lg">
+                        <legend>Dados do agendamento</legend>
+                        <input id="cadastrado" type="checkbox">
+                        <label id="msg" class="text-center alert alert-danger" style="display: none"></label>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label for="id_nome" class="input-group-text">
+                                        Nome</label>
+                                    <input type="text" name="nome" maxlength="100" class="form-control" list="pacientes"
+                                           required id="id_nome">
+                                    <datalist id="pacientes">
+                                    </datalist>
+                                </div>
+                                <a href="/pacientes/cadastro/" type="button" class="btn btn-secondary ml-1"
+                                   title="Cadastrar novo">
+                                    Novo
+                                </a>
+
+                                <div class="input-group-prepend">
+                                    <label for="id_profissional" class="input-group-text">
+                                        Profissional</label>
+                                    <select name="profissional" class="form-control" disabled="disabled" required
+                                            id="id_profissional">
+                                        {% if form.profissional.value == 'med' %}
+                                        <option value="{{form.profissional.value}}" selected>Médico(a)</option>
+                                        {% else %}
+                                        <option value="{{form.profissional.value}}" selected>Enfermeiro(a)</option>
+                                        {% endif %}
+
+                                    </select>
+                                </div>
+
+                                <div class="input-group-prepend">
+                                    <label for="id_turno" class="input-group-text">
+                                        Turno</label>
+                                    <select name="turno" class="form-control" disabled="disabled" required
+                                            id="id_turno">
+                                        {% if form.turno.value == 'M' %}
+                                        <option value="{{form.turno.value}}" selected>Manhã</option>
+                                        {% else %}
+                                        <option value="{{form.turno.value}}" selected>Tarde</option>
+                                        {% endif %}
+                                    </select>
+                                </div>
+
+                                <div class="input-group-prepend">
+                                    <label for="id_data" class="input-group-text">
+                                        Data</label>
+                                    <input type="text" name="data" value="{{form.data.value}}" class="form-control"
+                                           disabled="disabled" required id="id_data">
+                                </div>
+                            </div>
+                            <div class="card-body" align="center">
+                                <button id="botao_agendar" class="btn btn-primary">Agendar</button>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="calendario" class="calendar">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'agendamento/js/agendar.js' %}"></script>
+{% endblock %}

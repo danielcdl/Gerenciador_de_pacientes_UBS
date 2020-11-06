@@ -3,7 +3,6 @@
 {% block conteudo %}
 <div class="container">
     <div class="row justify-content-md-center">
-        <h6>Selecione uma data:</h6>
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
@@ -30,15 +29,21 @@
                         {% for dia in semana%}
                         {% if dia.status == 'disponivel'%}
                         <th class="table-primary">
-                            <a href="{{dia.data}}">
-                                {% else %}
+                        {% else %}
                         <th class="table-active">
-                            <a>
-                                {% endif %}
-                                <h2>{{dia.data|slice:"0:2"}}</h2>
-                            </a>
+                            {% endif %}
+                            <h2>{{dia.data|slice:"0:2"}}</h2>
                             {% if dia.status == 'disponivel' %}
-                            {{dia.motivo.manha}} agendado{{dia.motivo|pluralize}}
+                            <div class="list-group">
+                                <a href="{% url 'agendamento:agendar' 'med' dia.data 'M' %}" type="button" class="list-group-item list-group-item-primary">
+                                    Manhã
+                                    <span class="badge badge-primary badge-pill">{{dia.motivo.manha}}</span>
+                                </a>
+                                <a href="{% url 'agendamento:agendar' 'med' dia.data 'T' %}" type="button" class="list-group-item list-group-item-info">
+                                    Tarde
+                                    <span class="badge badge-primary badge-pill">{{dia.motivo.tarde}}</span>
+                                </a>
+                            </div>
                             {% else %}
                             {% if dia.motivo != 'mes' %}
                             {{dia.motivo}}
