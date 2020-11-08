@@ -3,6 +3,8 @@ from django.db.models import CharField
 from django.db.models import PositiveIntegerField
 from django.db.models import DateField
 from django.db.models import TextField
+from django.db.models import ForeignKey
+from django.db.models import SET_NULL
 from django.db.models import Manager
 
 
@@ -29,7 +31,9 @@ class Paciente(Model):
         null=True
     )
 
-    familia = PositiveIntegerField(
+    familia = ForeignKey(
+        'Familia',
+        on_delete=SET_NULL,
         null=True,
         blank=True
     )
@@ -50,13 +54,13 @@ class Familia(Model):
 
     tipo_logradouro = CharField(
         max_length=100,
-        null=False,
+        null=True,
         blank=True
     )
 
     nome_logradouro = CharField(
         max_length=100,
-        null=False,
+        null=True,
         blank=True
     )
 
@@ -67,19 +71,19 @@ class Familia(Model):
 
     bairro = CharField(
         max_length=100,
-        null=False,
+        null=True,
         blank=True
     )
 
     complemento = CharField(
         max_length=100,
-        null=False,
+        null=True,
         blank=True
     )
 
     cidade = CharField(
         max_length=100,
-        null=False,
+        null=True,
         blank=True
     )
 

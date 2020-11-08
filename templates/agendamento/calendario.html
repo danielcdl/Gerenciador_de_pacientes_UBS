@@ -6,7 +6,11 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between">
-                    <h4>{{mes}}</h4>
+                    <div class="row">
+                        <a href="{% url 'agendamento:calendario_mes' profissional anterior.mes anterior.ano %}" type="button" class="btn ml-2" title="Anterior"><<</a>
+                        <h4>{{mes}}</h4>
+                        <a href="{% url 'agendamento:calendario_mes' profissional proximo.mes proximo.ano %}" type="button" class="btn mr-2" title="Próximo">>></a>
+                    </div>
                     <h3>{{ano}}</h3>
                 </div>
             </div>

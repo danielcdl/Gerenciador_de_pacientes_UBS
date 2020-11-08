@@ -55,8 +55,15 @@
                     <a href="{% url 'pacientes:cadastro_familia' %}" class="nav-link">Cadastrar Família</a>
                 </div>
             </li>
-            <li class="nav-item">
-                <a href="{% url 'agendamento:index' %}" class="nav-link">Agendamentos</a>
+
+            <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" href="#" id="agendamentoDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">Agendamentos</a>
+                <div class="dropdown-menu" aria-labelledby="familiaDropdown">
+                    <a class="dropdown-item" href="{% url 'agendamento:index' %}" class="nav-link">Agendar</a>
+                    <a class="dropdown-item" href="{% url 'agendamento:agendados' 'med' %}" class="nav-link">Agendados(Médico(a))</a>
+                    <a class="dropdown-item" href="{% url 'agendamento:agendados' 'enf' %}" class="nav-link">Agendados(Enfermeiro(a))</a>
+                </div>
             </li>
         </ul>
         <ul class="navbar-nav float-right">

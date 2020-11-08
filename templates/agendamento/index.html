@@ -14,10 +14,11 @@
                     <p>
                         Faça aqui os agendamentos para Clínico Geral.
                     </p>
-                    <a href="{% url 'agendamento:calendario_atual' 'med' %}" class="btn btn-primary">AGENDAR</a>
+                    <a href="{% url 'agendamento:calendario' 'med' %}" class="btn btn-primary">AGENDAR</a>
                 </div>
             </div>
         </div>
+
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="card">
                 <div class="card-header">
@@ -27,7 +28,7 @@
                     <p>
                         Faça aqui os agendamentos para Enfermagem.
                     </p>
-                    <a href="{% url 'agendamento:calendario_atual' 'enf' %}" class="btn btn-primary">AGENDAR</a>
+                    <a href="{% url 'agendamento:calendario' 'enf' %}" class="btn btn-primary">AGENDAR</a>
                 </div>
             </div>
         </div>

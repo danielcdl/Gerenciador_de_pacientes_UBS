@@ -1,0 +1,36 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}UBS PINHO{% endblock %}
+
+{% block conteudo %}
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-sm-6">
+
+                <table id="tabela" class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>N°</th>
+                        <th>Nome</th>
+                        <th>Família</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for paciente in pacientes %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <th>{{ paciente.nome }}</th>
+                            <th>{{ paciente.familia }}</th>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}
