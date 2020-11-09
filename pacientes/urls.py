@@ -14,6 +14,6 @@ urlpatterns = [
     path('cadastro/', Cadastro.as_view(), name='cadastro'),
     path('cadpaciente/', CadastroPaciente.as_view(), name='cadastro_paciente'),
     path('cadfamilia/', CadastroFamilia.as_view(), name='cadastro_familia'),
-    re_path(r'autocomplete/(?P<nome>[a-z\s]+)/$', autocomplete_pacientes),
-    re_path(r'^(?P<tipo>[a-z]+)/(?P<dado>[a-z0-9\s]+)/$', consultar_paciente),
+    re_path(r'^autocomplete/(?P<nome>[a-zA-Z\s]+)/$', autocomplete_pacientes),
+    re_path(r'^(?P<tipo>[a-z]+)/(?P<dado>[a-zA-z0-9\s]+)/$', consultar_paciente),
 ]

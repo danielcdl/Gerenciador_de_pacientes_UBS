@@ -3,9 +3,10 @@ from datetime import datetime
 from datetime import timedelta
 
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView
 
+from pacientes.models import Paciente
 from .forms import AgendamentoForm
 from .models import Agendamento
 from .models import DiaIndisponivel
@@ -13,24 +14,26 @@ from .models import Feriado
 
 
 class Index(TemplateView):
+    hoje = datetime.now()
     template_name = 'agendamento/index.html'
+    extra_context = {'mes': hoje.month, 'ano': hoje.year}
 
 
 class Calendario(View):
     context = {}
 
     def get(self, request, **kargs):
-        print(kargs)
         profissional = kargs['profissional']
         validar_profissional(profissional)
         self.context['profissional'] = profissional
+
+        hoje = datetime.now().date()
 
         if 'mes' and 'ano' in kargs:
             validar_data(f"01-{kargs['mes']}-{kargs['ano']}")
             mes = int(kargs['mes'])
             ano = int(kargs['ano'])
         else:
-            hoje = datetime.now()
             mes = hoje.month
             ano = hoje.year
 
@@ -69,6 +72,7 @@ class Calendario(View):
             agend_manha = agendamentos.count((data, 'M'))
             agend_tarde = agendamentos.count((data, 'T'))
             data_formatada = data.strftime('%d-%m-%Y')
+
             if contador % 7 == 5:
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'sábado'})
                 dias.append(semana)
@@ -79,6 +83,8 @@ class Calendario(View):
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'feriado'})
             elif data in dias_indisponiveis:
                 semana.append({'data': data_formatada, 'status': 'desabilitado', 'motivo': 'indisponível'})
+            elif data < hoje:
+                semana.append({'data': data_formatada, 'status': 'desabilitado'})
             else:
                 semana.append({'data': data_formatada, 'status': 'disponivel',
                                'motivo': {'manha': agend_manha, 'tarde': agend_tarde}})
@@ -102,7 +108,6 @@ class Agendar(View):
         self.context['data'] = kargs['data'].replace('-', '/')
         self.context['turno'] = 'Manhã' if kargs['turno'] == 'M' else 'Tarde'
         self.context['profissional'] = 'Médico(a)' if kargs['profissional'] == 'med' else 'Enfermeiro(a)'
-        self.context['form'] = AgendamentoForm()
         return render(request, self.tamplete_name, self.context)
 
     def post(self, request, **kargs):
@@ -110,24 +115,38 @@ class Agendar(View):
         profissional = kargs['profissional']
         validar_profissional(profissional)
 
-        form = AgendamentoForm(request.POST)
-        if form.is_valid():
-            formulario = form.save(commit=False)
-            formulario.profissional = kargs['profissional']
-            formulario.turno = kargs['turno']
+        nome = request.POST.get('nome')
+        paciente = Paciente.objetos.filter(nome=nome).last()
+        if paciente is not None:
             data = kargs['data'].split('-')
-            formulario.data = f'{data[2]}-{data[1]}-{data[0]}'
-            formulario.save()
-            return redirect('agendamento:calendario_atual', profissional=profissional)
+            agendamento = Agendamento(
+                paciente=paciente,
+                profissional=kargs['profissional'],
+                turno=kargs['turno'],
+                data=f'{data[2]}-{data[1]}-{data[0]}'
+            )
+            agendamento.save()
+            return redirect('agendamento:calendario', profissional=profissional, ano=data[2], mes=data[1])
         else:
-            return render(request, self.tamplete_name, {'form': form})
+            self.context['msg'] = f'O paciente {nome} não está cadastrado. Cadastre-o!'
+            return render(request, self.tamplete_name, self.context)
 
 
 class Agendados(View):
     template_name = 'agendamento/agendados.html'
     context = {}
-    def get(self,request, **kargs):
-        pacientes = Agendamento.objetos.all()
+
+    def get(self, request, **kargs):
+        data = request.GET.get('data', None)
+        #validar_data(data)
+
+        profissional = kargs['profissional']
+        validar_profissional(profissional)
+
+        pacientes = Agendamento.objetos.filter(data=data, profissional=profissional).values('paciente','paciente__familia')
+        self.context['manha'] = pacientes.filter(turno='M')
+        self.context['tarde'] = pacientes.filter(turno='T')
+
         self.context['pacientes'] = pacientes
         return render(request, self.template_name, self.context)
 

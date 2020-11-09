@@ -1,70 +1,70 @@
-{% extends 'layouts/base.html'%}
+{% extends 'layouts/base.html' %}
 {% load static %}
 {% block conteudo %}
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex justify-content-between">
-                    <div class="row">
-                        <a href="{% url 'agendamento:calendario_mes' profissional anterior.mes anterior.ano %}" type="button" class="btn ml-2" title="Anterior"><<</a>
-                        <h4>{{mes}}</h4>
-                        <a href="{% url 'agendamento:calendario_mes' profissional proximo.mes proximo.ano %}" type="button" class="btn mr-2" title="Próximo">>></a>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="row">
+                            <a href="{% url 'agendamento:calendario' profissional anterior.mes anterior.ano %}"
+                               type="button" class="btn ml-2" title="Anterior"><<</a>
+                            <h4>{{ mes }}</h4>
+                            <a href="{% url 'agendamento:calendario' profissional proximo.mes proximo.ano %}"
+                               type="button" class="btn mr-2" title="Próximo">>></a>
+                        </div>
+                        <h3>{{ ano }}</h3>
                     </div>
-                    <h3>{{ano}}</h3>
                 </div>
-            </div>
-            <div class="card-body">
-                <table id="tabela" class="table table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>Domingo</th>
-                        <th>Segunda</th>
-                        <th>Terça</th>
-                        <th>Quarta</th>
-                        <th>Quinta</th>
-                        <th>Sexta</th>
-                        <th>Sábado</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for semana in calendario %}
-                    <tr>
-                        {% for dia in semana%}
-                        {% if dia.status == 'disponivel'%}
-                        <th class="table-primary">
-                        {% else %}
-                        <th class="table-active">
-                            {% endif %}
-                            <h2>{{dia.data|slice:"0:2"}}</h2>
-                            {% if dia.status == 'disponivel' %}
-                            <div class="list-group">
-                                <a href="{% url 'agendamento:agendar' 'med' dia.data 'M' %}" type="button" class="list-group-item list-group-item-primary">
-                                    Manhã
-                                    <span class="badge badge-primary badge-pill">{{dia.motivo.manha}}</span>
-                                </a>
-                                <a href="{% url 'agendamento:agendar' 'med' dia.data 'T' %}" type="button" class="list-group-item list-group-item-info">
-                                    Tarde
-                                    <span class="badge badge-primary badge-pill">{{dia.motivo.tarde}}</span>
-                                </a>
-                            </div>
-                            {% else %}
-                            {% if dia.motivo != 'mes' %}
-                            {{dia.motivo}}
-                            {% endif %}
-                            {% endif %}
-                        </th>
-                        {% endfor%}
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <div class="card-body">
+                    <table id="tabela" class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Domingo</th>
+                            <th>Segunda</th>
+                            <th>Terça</th>
+                            <th>Quarta</th>
+                            <th>Quinta</th>
+                            <th>Sexta</th>
+                            <th>Sábado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for semana in calendario %}
+                            <tr>
+                                {% for dia in semana %}
+                                    <th class="{% if dia.status == 'disponivel' %} table-primary {% else %}table-active{% endif %}">
+                                        <h2>{{ dia.data|slice:"0:2" }}</h2>
+                                        {% if dia.status == 'disponivel' %}
+                                            <div class="list-group">
+                                                <a href="{% url 'agendamento:agendar' profissional dia.data 'M' %}"
+                                                   type="button" class="list-group-item list-group-item-primary">
+                                                    Manhã
+                                                    <span class="badge badge-primary badge-pill">{{ dia.motivo.manha }}</span>
+                                                </a>
+                                                <a href="{% url 'agendamento:agendar' profissional dia.data 'T' %}"
+                                                   type="button" class="list-group-item list-group-item-info">
+                                                    Tarde
+                                                    <span class="badge badge-primary badge-pill">{{ dia.motivo.tarde }}</span>
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            {% if dia.motivo != 'mes' %}
+                                                {{ dia.motivo }}
+                                            {% endif %}
+                                        {% endif %}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'agendamento/js/calendario.js' %}"></script>
+    <script src="{% static 'agendamento/js/calendario.js' %}"></script>
 {% endblock %}

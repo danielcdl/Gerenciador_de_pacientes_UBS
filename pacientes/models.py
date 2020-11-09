@@ -45,6 +45,9 @@ class Paciente(Model):
 
     objetos = Manager()
 
+    def __str__(self):
+        return self.nome
+
     class Meta:
         ordering = ['nome']
 
@@ -88,6 +91,9 @@ class Familia(Model):
     )
 
     objetos = Manager()
+
+    def __str__(self):
+        return str(self.familia)
 
     class Meta:
         ordering = ['familia']
