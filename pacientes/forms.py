@@ -7,7 +7,7 @@ from .models import Familia
 class PacienteForm(forms.ModelForm):
     class Meta:
         model = Paciente
-        fields = '__all__'
+        exclude = ('familia',)
 
 
 class FamiliaForm(forms.ModelForm):

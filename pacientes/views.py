@@ -1,5 +1,5 @@
 from django.http import JsonResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.views.generic import TemplateView
 from django.views.generic import View
@@ -46,16 +46,17 @@ class CadastroPaciente(View):
     context = {}
     form_class = PacienteForm
 
+    def get(self, request):
+        self.context['form'] = PacienteForm()
+        return render(request, self.template_name, self.context)
+
     def post(self, request):
-        sus = self.request.POST.get('sus', '').strip()
-        nome = self.request.POST.get('nome', '').lower().strip()
-        paciente = None
+        n_familia = request.POST.get('familia')
+        familia = get_object_or_404(Familia, familia=n_familia)
+        chave = self.request.POST.get('chave', '')
 
-        if sus != '':
-            paciente = Paciente.objetos.filter(sus=sus).last()
-
-        if sus == '' or paciente is None:
-            paciente = Paciente.objetos.filter(nome__iexact=nome).last()
+        if chave:
+            paciente = Paciente.objetos.filter(id=chave).last()
 
         if paciente is not None:
             form = self.form_class(request.POST, instance=paciente)
@@ -63,16 +64,13 @@ class CadastroPaciente(View):
             form = self.form_class(request.POST)
 
         if form.is_valid():
-            form.save()
+            form_paciente = form.save(commit=False)
+            form_paciente.familia = familia
+            form_paciente.save()
             return redirect('pacientes:cadastro_paciente')
         else:
             self.context['form'] = form
-            return render(request, self.template_name, self.context, )
-
-    def get(self, request):
-        form = PacienteForm(self.request.GET)
-        self.context['form'] = form
-        return render(request, self.template_name, self.context)
+            return render(request, self.template_name, self.context)
 
 
 class CadastroFamilia(View):
@@ -81,8 +79,10 @@ class CadastroFamilia(View):
     form_class = FamiliaForm
 
     def post(self, request):
-        n_familia = request.POST.get('familia')
-        familia = Familia.objetos.filter(familia=n_familia).last()
+        chave = request.POST.get('chave', '')
+        familia = None
+        if chave:
+            familia = Familia.objetos.filter(id=chave)
 
         if familia is not None:
             form = self.form_class(request.POST, instance=familia)
@@ -91,7 +91,7 @@ class CadastroFamilia(View):
 
         if form.is_valid():
             form.save()
-            return redirect('pacientes:paciente_cadastro')
+            return redirect('pacientes:cadastro_paciente')
         else:
             self.context['form'] = form
             return render(request, self.template_name, self.context)

@@ -1,11 +1,11 @@
 $(document).ready(function () {
     $('#id_familia').on('change', function () {
         $.ajax({
-            url: "dados/",
+            url: "/pacientes/familia/" + $(this).val(),
             type: "GET",
-            data: $(this).serialize(),
             success: function (dados) {
                 if (dados.encontrado === true) {
+                    $('#id_chave').val(dados.id)
                     $('#id_tipo_logradouro').val(dados.tipo_logradouro);
                     $('#id_nome_logradouro').val(dados.nome_logradouro);
                     $('#id_numero').val(dados.numero);

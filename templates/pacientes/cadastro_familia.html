@@ -15,6 +15,7 @@
                     <legend>Dados da Família</legend>
                     <form method="post">
                         {% csrf_token %}
+                        <input type="number" name="chave" id="id_chave" hidden>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <label for="id_familia" class="input-group-text">

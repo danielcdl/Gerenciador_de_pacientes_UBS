@@ -2,15 +2,15 @@ $(document).ready(function () {
     $('#id_sus').on('change', function () {
         if (this.value !== '') {
             $.ajax({
-                url: "dados/",
+                url: "/pacientes/sus/" + $(this).val(),
                 type: "GET",
-                data: $(this).serialize(),
                 success: function (dados) {
                     if (dados.encontrado === true) {
                         let botao = $('#botao');
                         let reset = $('#reset');
                         let msg = $('#msg');
                         $('#encontrado').attr('value', 'encontrado');
+                        $('#id_chave').val(dados.id);
                         $('#id_nome').val(dados.nome);
                         $('#id_mae').val(dados.mae);
                         $('#id_nascimento').val(dados.nascimento);
@@ -37,9 +37,8 @@ $(document).ready(function () {
     $('#id_nome').on('change', function () {
         if (this.value !== '' && $('#encontrado').val() !== 'encontrado') {
             $.ajax({
-                url: "dados/",
+                url: "/pacientes/nome/" + $(this).val(),
                 type: "GET",
-                data: $(this).serialize(),
                 success: function (dados) {
                     let botao = $('#botao');
                     if (dados.encontrado === true) {
@@ -47,6 +46,7 @@ $(document).ready(function () {
                         if (sus !== dados.sus) {
                             sus.val(dados.sus);
                         }
+                        $('#id_key').val(dados.id);
                         $('#id_mae').val(dados.mae);
                         $('#id_nascimento').val(dados.nascimento);
                         $('#id_familia').val(dados.familia);
