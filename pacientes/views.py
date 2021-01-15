@@ -27,7 +27,7 @@ class Consultar(View):
             elif tipo == 'nascimento':
                 pacientes = pacientes.filter(nascimento=dado)
             elif tipo == 'familia':
-                pacientes = pacientes.filter(familia=dado)
+                pacientes = pacientes.filter(familia__familia=dado)
             else:
                 pacientes = pacientes.filter(nome__icontains=dado)
         else:
@@ -57,6 +57,8 @@ class CadastroPaciente(View):
 
         if chave:
             paciente = Paciente.objetos.filter(id=chave).last()
+        else:
+            paciente = None
 
         if paciente is not None:
             form = self.form_class(request.POST, instance=paciente)
@@ -79,13 +81,16 @@ class CadastroFamilia(View):
     form_class = FamiliaForm
 
     def post(self, request):
+        print(request.POST)
         chave = request.POST.get('chave', '')
         familia = None
         if chave:
-            familia = Familia.objetos.filter(id=chave)
+            familia = Familia.objetos.filter(id=chave).last()
+        else:
+            familia = None
 
         if familia is not None:
-            form = self.form_class(request.POST, instance=familia)
+            form = self.form_class(request.POST, instance=familia).last()
         else:
             form = self.form_class(request.POST)
 
