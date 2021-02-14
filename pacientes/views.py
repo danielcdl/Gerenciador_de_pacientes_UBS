@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from django.views.generic import TemplateView
 from django.views.generic import View
 
+import pandas as pd
+
 from pacientes.forms import PacienteForm
 from pacientes.forms import FamiliaForm
 from pacientes.models import Paciente
@@ -133,3 +135,11 @@ def autocomplete_pacientes(request, **kargs):
         nome = kargs['nome']
         pacientes = Paciente.objetos.filter(nome__istartswith=nome).values_list('id', 'nome')[:5]
         return JsonResponse(dict(pacientes))
+
+
+def adicionar_pacientes_xls(request):
+    if request.method == 'POST':
+        dados = pd.read_excel("/relatorio.xls", sheet_name="Sheet0")
+        for linha in dados:
+            print(linha)
+    return render(request, "pacientes/inserir_xls.html")

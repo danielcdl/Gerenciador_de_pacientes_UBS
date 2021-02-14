@@ -1,5 +1,6 @@
 .idea
 __pycache__
+relatorio.xls
 migracao.py
 Banco.db
 db.sqlite3
@@ -14,3 +15,5 @@ ubs/settings.py
 
 agendamento/__pycache__
 agendamento/migrations
+templates/agendamento/debug.log
+
