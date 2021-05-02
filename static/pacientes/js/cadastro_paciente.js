@@ -46,7 +46,8 @@ $(document).ready(function () {
                         if (sus !== dados.sus) {
                             sus.val(dados.sus);
                         }
-                        $('#id_key').val(dados.id);
+                        $('#id_chave').val(dados.id);
+                        $('#id_chave2').val(dados.id);
                         $('#id_mae').val(dados.mae);
                         $('#id_nascimento').val(dados.nascimento);
                         $('#id_familia').val(dados.familia);
@@ -69,6 +70,7 @@ $(document).ready(function () {
             });
         }
     });
+
 
     $('#reset').on('click', function () {
         $('#encontrado').val('')

@@ -16,7 +16,7 @@ urlpatterns = [
     path('inserir/', adicionar_pacientes_xls, name='inserir'),
     path('cadpaciente/', CadastroPaciente.as_view(), name='cadastro_paciente'),
     path('cadfamilia/', CadastroFamilia.as_view(), name='cadastro_familia'),
-    re_path(r'^autocomplete/(?P<nome>[a-zA-Z\s]+)/$', autocomplete_pacientes),
-    re_path(r'^(?P<tipo>[a-z]+)/(?P<dado>[\w\s]+)/$', consultar_paciente),
+    path('autocomplete/<str:nome>/', autocomplete_pacientes),
+    path('<str:tipo>/<str:dado>/', consultar_paciente),
 ]
 
