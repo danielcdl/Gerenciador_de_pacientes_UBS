@@ -56,6 +56,11 @@ class CadastroPaciente(View):
         n_familia = request.POST.get('familia')
         familia = get_object_or_404(Familia, familia=n_familia)
         chave = self.request.POST.get('chave', '')
+        
+        print(n_familia)
+        print(familia)
+        print(familia.id)
+        print(chave)
 
         if chave:
             paciente = Paciente.objetos.filter(id=chave).last()
@@ -69,7 +74,7 @@ class CadastroPaciente(View):
 
         if form.is_valid():
             form_paciente = form.save(commit=False)
-            form_paciente.familia = familia
+            form_paciente.familia = familia.id
             form_paciente.save()
             return redirect('pacientes:cadastro_paciente')
         else:
@@ -113,12 +118,37 @@ def consultar_paciente(request, **kargs):
         tipo = kargs['tipo']
         dado = kargs['dado']
 
+        if tipo == 'familia':
+            dados = Familia.objetos.filter(familia=dado).values().last()
+        else:
+            if tipo == 'sus':
+                dados = Paciente.objetos.filter(sus=dado).values().last()
+            elif tipo == 'nome':
+                dados = Paciente.objetos.filter(nome__iexact=dado).values().last()
+            else:
+                raise Http404('Tipo não encontrado')
+            
+            if dados is not None:
+                dados['familia'] = Familia.objetos.filter(id=dados['familia_id']).last().familia
+                print(Familia.objetos.filter(id=dados['familia_id']).last().familia)
+            
+
+        if dados is not None:
+            dados = dict(dados)
+            dados['encontrado'] = True
+        else:
+            dados = {'encontrado': False}
+        print(dados)
+        return JsonResponse(dados)
+
+def consultar_familia(request, tipo, dado):
+
+    if request.method == "POST":
+
         if tipo == 'sus':
             dados = Paciente.objetos.filter(sus=dado).values().last()
         elif tipo == 'nome':
             dados = Paciente.objetos.filter(nome__iexact=dado).values().last()
-        elif tipo == 'familia':
-            dados = Familia.objetos.filter(familia=dado).values().last()
         else:
             raise Http404('Tipo não encontrado')
 
@@ -127,6 +157,7 @@ def consultar_paciente(request, **kargs):
             dados['encontrado'] = True
         else:
             dados = {'encontrado': False}
+        print(dados)
         return JsonResponse(dados)
 
 
